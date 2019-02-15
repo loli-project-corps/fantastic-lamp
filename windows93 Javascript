@@ -1,0 +1,109 @@
+# big erika marsch
+windows93 copy files
+$prompt('prompt text here', 'text in prompt text box') //displays a prompt message
+$notif('notif text here') //displays a notification bubble on the bottom right
+$alert('alert text here') // displays an alert message
+$alert.info('info text here') // displays an info message
+$alert.error('error text here') // displays an error message
+$alert.progress('body','text') // see example of this, there are more arguments.
+$alert.help('test') // another dialog, see example.
+$confirm('confirm text here') // displays a question dialog
+// (you can put html in these functions)
+// there's a lot more to these functions as listed here. i plan to make a more detailed documentation of these in the future. (clue: passing objects to them and do more while writing less, as well as more features)
+$window('http://example.com') // opens a website in a window (bear in mind that some websites do not work in this) due to cross-origin related stuff
+$explorer('/c/a folder somewhere'); //opens up an explorer window in that directory
+
+$exe('application name') // open an application of your choice
+// if you're going to use this to execute a program stored in a js file somewhere in /a/
+// just grab the content of the file using $db, ect, and eval(aeiou) or new Function(aeiou)() the result
+
+$explorer.setCurrent(id) // find the explorer window via id then focus on it (0 is always the desktop)
+$window.current.maximize() // toggles between maximising to the window that is currently being used
+$window.current.minimize(); // minimise the window that's currently being focused on
+$window.current.restore(); // if the window that's currently being used has been minimised, open it back up again.
+$window.current.destroy(); // closes the window that's currently being focused on (no animation)
+$window.current.close(); // same as destroy but with animation
+$loader.script("http://scriptu.rl/dot.js") // loads a script, similar to $exe("js ")
+$loader.css("http://css-u.rl/dot.css") // loads a css file, similar to $loader.script
+$loader([url1, url2], callback) // loads an array of css/js files, callback is called when all scripts/styles are loaded
+$drag("querySelector") // make an element draggable
+biosSetup() // open the BIOS, only executable at boot
+$noop // empty function, useful for callbacks that are required but you dont need.
+$explorer(options, [callback])
+    // options: String/Object
+    //          String: path to folder
+    // Object:
+    // browse: Boolean (browse for file)
+    // accept: String (accept X mimetype, use * for wildcard (e.g: image/* or */* for anything))
+    // path: String (path to folder)
+    // onclose: Function (called once file is selected)
+        // Returns:
+        // Boolean (If "Open" is clicked, true, otherwise, if window is closed or cancel is clicked, false)
+        // String (list of file(s) selected)
+        // if you have multiple files, use [Files].split(", ").map(e=>e.replace(/^"|"$/g, "")) to convert to an array
+$menu(Element, MenuArray, Object)
+  // Element: element to output to
+  // MenuArray: The array used for menus
+  // Object: 
+    // mode: String "bar" or "popup"
+$fs.utils.getIcon("file.txt") // gets the icon for a file/folder
+$fs.utils.isFolder("file.txt") // check if the string is a folder, returns a Boolean
+$fs.utils.getName("/path/to/file.txt") // returns only the file name, in this case, return "file.txt"
+$fs.utils.replaceExt("file.txt", "png") // replaces the file extension to something else, file.txt will become file.png
+$fs.utils.getMime("file.txt") // gets the mimetype of a file, note: not all mimetypes are supported
+$fs.utils.getExt("file.txt") // gets the extension of a file
+$fs.utils.getOpeners("file.txt") // returns an array of apps that can open the file specified
+
+$audio('alert').play() // howler apparently (you play windows 93 sounds specified by name)
+$boot.VERSION // returns the w93 version
+le._path // returns directories of things (.desktop returns where the desktop is located, .home returns where the users home is and .skin returns the folder the skin is)
+le._selected // returns an array of every shortcut or file selected at that moment
+$explorer.current.getPath() // returns the path of the folder you're currently in from the explorer window you're currently using (can also be desktop)
+$explorer.current // returns an object containing information about the explorer window you're currently using ( $explorer.current.id returns an id that you can use with $explorer.setCurrent(id))
+$fullscreen() // toggle fullscreen
+$fs.utils.getInfo('/a/file/dir.js'); // gives out info of that file in an object
+location.reload() // restarts windows 93
+$window.current.id // gets the id of the current window
+$explorer.exe.SelectAll() // select everything in the current explorer window (can also be desktop)
+$explorer.exe.EditShortcut() // open the edit shortcut dialog for the thing that is currently selected
+$window.current.changeTitle('title'); // changes the title of the window that's currently being focused on
+$window.current // returns an object containing info about the program that's currently being focused on
+$window.current.cfg // returns all sorts of info about the program that's currently being focused on (is too big so i can't put everything here)
+$window.current.changeIcon('/a/path/to/an/image.png') // set the icon of the window that's currently being focused on to something else (image doesn't have to be on w93, can be off another website)
+$window.current.changeSize({width: 640, height: 480}) // set the size of the current window in pixels (some windows have a size limit)
+le._dom // includes a few html things, such as the taskbar or desktop
+le._apps // returns all applications in objects
+$fs.utils.exist('/a/file/dir.js') // check if a file exists, and if it exists, returns 0, if it doesn't exist, return false// if it's a folder you're specifying, it'll just return the contents of it in objects
+$fs.utils.getMenuOpenWith('/a/file/location.js') // returns the programs you can open the specified file with in an array with each application in an object
+$fs.utils.getFileMenu('/a/directory') //however, if you want a neater directory or whatever listing, then use the "foldersList" array in this
+// file creation
+
+// NOTE:
+// $db and localforage both use IndexedDB, they just use a different wrapper
+// you cannot use $db to get localStorage files and vice-verca
+
+// IndexedDB (Promise)
+localforage.setItem('filename.txt', 'hello world') // create/edit file, only effective after a restart or explorer refresh
+localforage.getItem('filename.txt').then(function(okthen){return okthen}) // get contents of a file
+localforage.removeItem("filename.txt") // delete a file
+localforage.clear() // delete all files from IndexedDB
+localforage.keys().then(function(files){/* do something with files*/}) // returns an array of all files stored in IndexedDB 
+
+// IndexedDB (Async) (personally recommended)
+$db.set("file.txt", "hello world") // create a file
+$db.del("file.txt") // delete a file
+$db.clear() // delete all files from IndexedDB
+$db.getRaw("file.txt", callback) // callback() returns the RAW file content
+$db.get("file.txt", callback) // callback() returns the file content, if JSON, returns the parsed result
+$db.keys(callback) // callback() returns null and an array of files stored in IndexedDB
+
+// localStorage (Sync)
+$store.set('desktop/meme.txt', 'hello world'); // create meme.txt in desktop
+$store.get("desktop/meme.txt") // returns 
+$store.clear() // delete all files from localStorage
+$store.getRaw('desktop/meme.txt') // read file meme.txt in desktop
+$store.del("desktop/meme.txt") // delete a file
+$store.keys() // returns all files saved into localStorage
+
+$explorer.refresh() // refresh explorer (run once you create or remove a file or folder, preferably with $db, to make it appear)
+$archive('/folder/name')  // put the contents of the folder into a zipped archive that you can download, does not always work on folders in /c/
